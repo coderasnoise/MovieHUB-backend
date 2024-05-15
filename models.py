@@ -38,6 +38,7 @@ class Movie(db.Model):
     release_date = db.Column(db.Text)
     duration = db.Column(db.Integer)
     thumbnail = db.Column(db.String(255))
+    video_url = db.Column(db.String(255), nullable=True)
 
 
 class Series(db.Model):
@@ -47,6 +48,7 @@ class Series(db.Model):
     description = db.Column(db.Text)
     release_date = db.Column(db.Date)
     thumbnail = db.Column(db.String(255))
+    video_url = db.Column(db.String(255), nullable=True)
 
 
 class Episode(db.Model):

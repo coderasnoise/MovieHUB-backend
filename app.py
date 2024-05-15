@@ -6,8 +6,10 @@ from routes import configure_routes
 
 app = Flask(__name__, static_folder='static')
 UPLOAD_FOLDER = 'static/thumbnails'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+VIDEO_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif','mp4', 'mov', 'avi', 'mkv'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['VIDEO_FOLDER'] = VIDEO_FOLDER
 app.config['ALLOWED_EXTENSIONS'] = ALLOWED_EXTENSIONS
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://batug:pass@35.226.213.195:3306/moviehub'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

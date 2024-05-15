@@ -91,11 +91,15 @@ def configure_routes(app):
     @user_token_required
     @admin_required
     def add_content_admin():
-        if 'thumbnail' not in request.files:
-            return jsonify({'message': 'No file part'}), 400
-        file = request.files['thumbnail']
+        if 'thumbnail' not in request.files or 'video' not in request.files:
+            return jsonify({'message': 'Thumbnail and video files are required'}), 400
+
+        thumbnail_file = request.files['thumbnail']
+        video_file = request.files['video']
+
         content_data = request.form.to_dict()
-        result, status = upload_content(content_data, file)
+
+        result, status = upload_content(content_data, thumbnail_file, video_file)
         return jsonify(result), status
 
     @app.route('/static/thumbnails/<path:filename>')
@@ -130,9 +134,13 @@ def configure_routes(app):
             return {"message": f"An error occurred: {str(e)}"}, 500
 
     @app.route('/admin/users/<int:user_id>', methods=['DELETE'])
-    @user_token_required
+    @token_required
+
     @admin_required
-    def delete_user(user_id):
+    def delete_user(user_id=None, **kwargs):
+        if user_id is None:
+            return jsonify({'message': 'User ID is missing!'}), 400
+
         user = User.query.get(user_id)
         if not user:
             return jsonify({'message': 'User not found'}), 404
@@ -218,7 +226,7 @@ def configure_routes(app):
 
     @app.route('/contents/<int:content_id>', methods=['GET'])
     @token_required
-    def content_detail(content_id,user_id):
+    def content_detail(content_id, user_id):
         content = get_content_by_id(content_id)
         if content:
             return jsonify(content), 200
